@@ -11,6 +11,6 @@ More examples to add:
 
 ## Instructions
 
-Explore the different repositories and use the example with `go run main.go`
+Explore the different folders and use the example with `go run main.go`
 
 It will show you an output and the time it took to execute.
