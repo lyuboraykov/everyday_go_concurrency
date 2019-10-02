@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-// MakeRequest makes a request for a person from star wars
-func MakeRequest(personId int) (string, error) {
+// FetchName makes a request for the name of star wars character
+func FetchName(personId int) (string, error) {
 	resp, err := http.Get(fmt.Sprintf("https://swapi.co/api/people/%d", personId))
 	if err != nil {
 		return "", err

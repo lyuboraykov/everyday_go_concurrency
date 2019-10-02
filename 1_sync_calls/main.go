@@ -11,8 +11,8 @@ func main() {
 }
 
 func dowork() {
-	name1, err1 := util.MakeRequest(1)
-	name2, err2 := util.MakeRequest(2)
+	name1, err1 := util.FetchName(1)
+	name2, err2 := util.FetchName(2)
 
 	if err1 != nil || err2 != nil {
 		fmt.Println("Error occurred: ", err1, err2)

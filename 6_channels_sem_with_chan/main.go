@@ -29,7 +29,7 @@ func dowork() {
 	for _, p := range people {
 		go func(p int) {
 			sem <- true
-			name, err := util.MakeRequest(p)
+			name, err := util.FetchName(p)
 			<-sem
 			results <- reqRes{name, err}
 		}(p)

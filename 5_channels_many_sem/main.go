@@ -32,7 +32,7 @@ func dowork() {
 	for _, p := range people {
 		go func(p int) {
 			_ = sem.Acquire(ctx, 1)
-			name, err := util.MakeRequest(p)
+			name, err := util.FetchName(p)
 			sem.Release(1)
 			results <- reqRes{name, err}
 		}(p)

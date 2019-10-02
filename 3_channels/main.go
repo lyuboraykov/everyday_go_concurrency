@@ -21,7 +21,7 @@ func dowork() {
 
 	for _, p := range people {
 		go func(p int) {
-			name, err := util.MakeRequest(p)
+			name, err := util.FetchName(p)
 			results <- reqRes{name, err}
 		}(p)
 	}

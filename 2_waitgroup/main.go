@@ -18,11 +18,11 @@ func dowork() {
 	var err1, err2 error
 	wg.Add(2)
 	go func() {
-		name1, err1 = util.MakeRequest(1)
+		name1, err1 = util.FetchName(1)
 		wg.Done()
 	}()
 	go func() {
-		name2, err2 = util.MakeRequest(2)
+		name2, err2 = util.FetchName(2)
 		wg.Done()
 	}()
 	wg.Wait()
