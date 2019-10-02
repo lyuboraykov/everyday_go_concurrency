@@ -2,18 +2,25 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
+
+	"github.com/lyuboraykov/everyday_go_concurrency/util"
 )
 
-const numPeople = 40
-const numParallelRequests = 3
+const (
+	numPeople           = 40
+	numParallelRequests = 3
+	timeout             = 3 * time.Second
+)
 
 func main() {
+	util.Timed(dowork)()
+}
+
+func dowork() {
 	ctx := context.Background()
-	timeoutCtx, cancelFunc := context.WithTimeout(ctx, 3*time.Second)
+	timeoutCtx, cancelFunc := context.WithTimeout(ctx, timeout)
 	defer cancelFunc()
 
 	type reqRes struct {
@@ -38,7 +45,7 @@ func main() {
 	for i := 0; i < numParallelRequests; i++ {
 		go func() {
 			for p := range peopleChan {
-				name, err := makeRequest(p)
+				name, err := util.FetchName(p)
 				results <- reqRes{name, err}
 			}
 		}()
@@ -60,22 +67,4 @@ peopleloop:
 	}
 
 	close(results)
-}
-
-func makeRequest(personId int) (string, error) {
-	resp, err := http.Get(fmt.Sprintf("https://swapi.co/api/people/%d", personId))
-	if err != nil {
-		return "", err
-	}
-
-	jsonDecoder := json.NewDecoder(resp.Body)
-	type person struct {
-		Name string `json:"name"`
-	}
-	p := person{}
-	err = jsonDecoder.Decode(&p)
-	if err != nil {
-		return "", err
-	}
-	return p.Name, err
 }
