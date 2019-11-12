@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/lyuboraykov/everyday_go_concurrency/util"
@@ -11,7 +12,7 @@ import (
 const (
 	numPeople           = 40
 	numParallelRequests = 3
-	timeout             = 3 * time.Second
+	timeout             = 1 * time.Second
 )
 
 func main() {
@@ -44,10 +45,19 @@ func dowork() {
 
 	for i := 0; i < numParallelRequests; i++ {
 		go func() {
-			for p := range peopleChan {
-				name, err := util.FetchName(p)
-				results <- reqRes{name, err}
+			for {
+				select {
+				case p, ok := <-peopleChan:
+					if !ok {
+						return
+					}
+					name, err := util.FetchName(p)
+					results <- reqRes{name, err}
+				case <-timeoutCtx.Done():
+					return
+				}
 			}
+
 		}()
 	}
 
@@ -66,5 +76,5 @@ peopleloop:
 		}
 	}
 
-	close(results)
+	close(peopleChan)
 }
