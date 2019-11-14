@@ -7,7 +7,7 @@ import (
 )
 
 const numPeople = 40
-const numParallelRequests = 2
+const numParallelRequests = 5
 
 func main() {
 	util.Timed(dowork)()

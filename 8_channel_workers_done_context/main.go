@@ -10,7 +10,7 @@ import (
 
 const (
 	numPeople           = 40
-	numParallelRequests = 3
+	numParallelRequests = 5
 	timeout             = 1 * time.Second
 )
 
